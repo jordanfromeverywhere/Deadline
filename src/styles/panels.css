@@ -1,3 +1,9 @@
+/* ─── Reduce motion override ────────────────────────────────────────────── */
+[data-reduce-motion="true"] * {
+  animation: none !important;
+  transition: none !important;
+}
+
 /* ─── Game Layout ────────────────────────────────────────────────────────── */
 .game-layout {
   display: grid;
