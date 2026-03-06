@@ -1,0 +1,87 @@
+/* ─── Cold Start Screen ──────────────────────────────────────────────────── */
+.cold-start {
+  position: fixed;
+  inset: 0;
+  background: var(--bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+
+.cold-start__console {
+  font-family: var(--font);
+  color: var(--fg);
+  min-width: 320px;
+  padding: 20px;
+}
+
+.cold-start__title {
+  font-size: 12px;
+  color: var(--fg-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 4px;
+  opacity: 0;
+  animation: char-resolve 0.1s ease-out 0.5s forwards;
+}
+
+.cold-start__divider {
+  font-size: 12px;
+  color: var(--border-bright);
+  margin-bottom: 16px;
+  opacity: 0;
+  animation: char-resolve 0.1s ease-out 0.8s forwards;
+}
+
+.cold-start__resonance {
+  margin-bottom: 20px;
+}
+
+.cold-start__resonance-label {
+  font-size: 11px;
+  color: var(--fg-dim);
+  margin-bottom: 4px;
+  opacity: 0;
+  animation: char-resolve 0.1s ease-out 1.2s forwards;
+}
+
+.cold-start__resonance-value {
+  font-size: 20px;
+  font-variant-numeric: tabular-nums;
+  color: var(--fg-highlight);
+  letter-spacing: 0.04em;
+  opacity: 0;
+  animation: char-resolve 0.1s ease-out 1.6s forwards;
+}
+
+.cold-start__bar {
+  font-size: 13px;
+  color: var(--border-bright);
+  letter-spacing: 0.02em;
+  margin-top: 4px;
+  opacity: 0;
+  animation: char-resolve 0.1s ease-out 1.8s forwards;
+}
+
+.cold-start__button-area {
+  margin-top: 24px;
+  opacity: 0;
+  animation: char-resolve 0.1s ease-out 2.5s forwards;
+}
+
+/* Fade-out when cold start completes */
+.cold-start--done {
+  animation: cold-start-fade 1s ease-out forwards;
+  pointer-events: none;
+}
+
+@keyframes cold-start-fade {
+  0% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+@keyframes char-resolve {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}

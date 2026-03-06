@@ -1,0 +1,328 @@
+/* ─── Game Layout ────────────────────────────────────────────────────────── */
+.game-layout {
+  display: grid;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  padding: 8px;
+  gap: 8px;
+  grid-template-columns: 260px 1fr;
+  grid-template-rows: auto 1fr auto;
+  align-content: start;
+}
+
+/* ─── Panel base ─────────────────────────────────────────────────────────── */
+.panel {
+  background: var(--panel-bg);
+  border: 1px solid var(--border);
+  padding: 10px 12px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.panel--scrollable {
+  overflow-y: auto;
+}
+
+/* Box-drawing header */
+.panel__header {
+  font-size: 11px;
+  color: var(--fg-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 6px;
+  margin-bottom: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.panel__title {
+  color: var(--fg-highlight);
+}
+
+.panel__body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+/* ─── Panel reveal animation ─────────────────────────────────────────────── */
+.panel--hidden {
+  display: none;
+}
+
+.panel--revealing {
+  animation: panel-reveal var(--panel-reveal-duration) ease-out forwards;
+}
+
+@keyframes panel-reveal {
+  0% {
+    opacity: 0;
+    clip-path: inset(0 0 100% 0);
+  }
+  20% {
+    opacity: 0.3;
+  }
+  100% {
+    opacity: 1;
+    clip-path: inset(0 0 0% 0);
+  }
+}
+
+/* ─── Resource rows ──────────────────────────────────────────────────────── */
+.resource-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 2px 0;
+  font-size: 12px;
+}
+
+.resource-row__label {
+  color: var(--fg-dim);
+  text-transform: uppercase;
+  font-size: 10px;
+  letter-spacing: 0.05em;
+}
+
+.resource-row__value {
+  color: var(--fg-highlight);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ─── Resonance bar ──────────────────────────────────────────────────────── */
+.resonance-display {
+  margin-bottom: 10px;
+}
+
+.resonance-display__label {
+  font-size: 10px;
+  color: var(--fg-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 3px;
+}
+
+.resonance-display__value {
+  font-size: 18px;
+  font-variant-numeric: tabular-nums;
+  color: var(--fg-highlight);
+  letter-spacing: 0.04em;
+  margin-bottom: 4px;
+}
+
+.resonance-bar {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  color: var(--fg-dim);
+}
+
+.resonance-bar__track {
+  flex: 1;
+  height: 10px;
+  border: 1px solid var(--border-bright);
+  position: relative;
+  background: var(--bg);
+  overflow: hidden;
+}
+
+.resonance-bar__fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  background: var(--resonance-fill);
+  transition: width 0.25s linear;
+}
+
+.resonance-bar__fill--overflow {
+  background: var(--noise-fill);
+}
+
+/* ─── Action buttons ─────────────────────────────────────────────────────── */
+.action-button {
+  display: inline-block;
+  padding: 4px 10px;
+  border: 1px solid var(--border-bright);
+  background: var(--button-bg);
+  color: var(--fg);
+  font-family: var(--font);
+  font-size: 12px;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  transition: background 0.1s, border-color 0.1s, color 0.1s;
+  user-select: none;
+  margin: 2px 0;
+  width: 100%;
+  text-align: center;
+}
+
+.action-button:hover:not(:disabled) {
+  background: var(--button-hover);
+  border-color: var(--fg-dim);
+  color: var(--fg-highlight);
+}
+
+.action-button:active:not(:disabled) {
+  background: var(--button-active);
+}
+
+.action-button:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+  border-color: var(--border);
+}
+
+.action-button--cooldown {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ─── Radio log ──────────────────────────────────────────────────────────── */
+.radio-log {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  height: 100%;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.radio-log__entry {
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--fg-voice);
+  border-left: 1px solid var(--border);
+  padding-left: 8px;
+}
+
+.radio-log__entry--system {
+  color: var(--fg-dim);
+  font-size: 11px;
+}
+
+/* Typewriter cursor blink */
+.typewriter-cursor {
+  display: inline-block;
+  width: 6px;
+  height: 13px;
+  background: var(--fg-voice);
+  vertical-align: text-bottom;
+  animation: cursor-blink 0.8s step-end infinite;
+  margin-left: 1px;
+}
+
+@keyframes cursor-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+/* ─── Survivor list ──────────────────────────────────────────────────────── */
+.survivor-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.survivor-entry {
+  font-size: 11px;
+  padding: 4px 6px;
+  border: 1px solid var(--border);
+}
+
+.survivor-entry--overdue .survivor-entry__name {
+  color: var(--fg-warning);
+}
+
+.survivor-entry--lost .survivor-entry__name {
+  text-decoration: line-through;
+  color: var(--fg-dim);
+}
+
+.survivor-entry__name {
+  font-size: 12px;
+  color: var(--fg-highlight);
+  margin-bottom: 2px;
+}
+
+.survivor-entry__descriptor {
+  color: var(--fg-dim);
+  font-size: 10px;
+}
+
+.survivor-entry__status {
+  font-size: 10px;
+  color: var(--fg-dim);
+  text-transform: uppercase;
+  margin-top: 2px;
+}
+
+/* ─── Map panel ──────────────────────────────────────────────────────────── */
+.map-panel pre {
+  font-size: 11px;
+  line-height: 1.4;
+  color: var(--fg-dim);
+  overflow-x: auto;
+  white-space: pre;
+}
+
+.map-location--signal { color: var(--fg); }
+.map-location--scouted { color: var(--fg-highlight); }
+.map-location--explored { color: var(--resonance-fill); }
+.map-location--anomaly { color: var(--fg-warning); }
+.map-location--incident { color: var(--fg-danger); }
+
+/* ─── Train status ───────────────────────────────────────────────────────── */
+.train-status__indicator {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding: 2px 0;
+}
+
+.train-status__indicator--moving {
+  color: var(--fg-highlight);
+}
+
+.train-status__indicator--stopped {
+  color: var(--fg-dim);
+}
+
+.car-list {
+  margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.car-entry {
+  font-size: 11px;
+  color: var(--fg-dim);
+  text-transform: uppercase;
+  padding: 1px 0;
+}
+
+/* ─── Noise UI corruption ────────────────────────────────────────────────── */
+[data-noise="high"] .panel__header .panel__title {
+  animation: title-corrupt 4s step-end infinite;
+}
+
+[data-noise="critical"] .panel__header .panel__title {
+  animation: title-corrupt 1.5s step-end infinite;
+}
+
+@keyframes title-corrupt {
+  0%, 90%   { opacity: 1; }
+  92%       { opacity: 0.3; letter-spacing: 0.2em; }
+  94%       { opacity: 1; letter-spacing: 0.06em; }
+  96%       { opacity: 0.5; }
+  100%      { opacity: 1; }
+}
