@@ -22,20 +22,18 @@ export function ColdStartScreen({ onComplete }: ColdStartScreenProps) {
   }, [set])
 
   function handleRadioClick() {
-    // Unlock radio action if not already done
     const current = useRunStore.getState()
     set({
       radioFirstClicked: true,
       lastTriggeredActions: { ...current.lastTriggeredActions, radio: (current.lastTriggeredActions['radio'] ?? 0) + 1 },
     })
     setPhase('fading')
+    // After fade animation, mark cold start done — App reads this from store and switches views
     setTimeout(() => {
       set({ coldStartComplete: true })
       onComplete()
     }, 1000)
   }
-
-  if (phase === 'gone') return null
 
   const displayValue = Math.floor(resonance).toString().padStart(9, '0')
   const pct = Math.min(resonance / 1000, 1)

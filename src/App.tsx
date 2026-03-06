@@ -10,29 +10,28 @@ import './styles/panels.css'
 import './styles/settings.css'
 
 export function App() {
+  // Read directly from store on every render — avoids useState race with persist hydration
   const coldStartComplete = useRunStore((s) => s.coldStartComplete)
   const reduceMotion = useSettingsStore((s) => s.reduceMotion)
-  const [showGame, setShowGame] = useState(coldStartComplete)
   const [settingsOpen, setSettingsOpen] = useState(false)
 
-  // Apply reduce-motion to document root
   useEffect(() => {
     document.documentElement.setAttribute('data-reduce-motion', reduceMotion ? 'true' : 'false')
   }, [reduceMotion])
 
   useEffect(() => {
-    if (showGame) {
+    if (coldStartComplete) {
       startGameLoop()
     }
     return () => stopGameLoop()
-  }, [showGame])
+  }, [coldStartComplete])
 
   return (
     <>
       {!coldStartComplete && (
-        <ColdStartScreen onComplete={() => setShowGame(true)} />
+        <ColdStartScreen onComplete={() => useRunStore.getState().set({ coldStartComplete: true })} />
       )}
-      {showGame && <GameLayout />}
+      {coldStartComplete && <GameLayout />}
 
       <button
         className="settings-btn"
