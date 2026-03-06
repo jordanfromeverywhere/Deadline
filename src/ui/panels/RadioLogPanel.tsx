@@ -2,7 +2,6 @@ import { useEffect, useRef } from 'react'
 import { useRunStore, selectRadioLog, selectActionsUnlocked } from '../../core/state/runState'
 import { useMetaStore } from '../../core/state/metaState'
 import { VoiceMessage } from '../components/VoiceMessage'
-import { useVoiceQueue } from '../hooks/useVoiceQueue'
 import { ActionButton } from '../components/ActionButton'
 
 export function RadioLogPanel() {
@@ -10,7 +9,6 @@ export function RadioLogPanel() {
   const actionsUnlocked = useRunStore(selectActionsUnlocked)
   const set = useRunStore((s) => s.set)
   const runNumber = useMetaStore((s) => s.runNumber)
-  const { onMessageComplete } = useVoiceQueue()
   const bottomRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -35,12 +33,11 @@ export function RadioLogPanel() {
         </span>
       </div>
       <div className="panel__body radio-log">
-        {radioLog.map((entry, i) => (
+        {radioLog.map((entry) => (
           <VoiceMessage
             key={entry.id}
             lines={entry.lines}
             isVoice={entry.isVoice}
-            onComplete={i === radioLog.length - 1 ? onMessageComplete : undefined}
           />
         ))}
         <div ref={bottomRef} />

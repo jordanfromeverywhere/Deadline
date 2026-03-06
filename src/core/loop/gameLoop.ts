@@ -90,6 +90,9 @@ function slowTick() {
   // Evaluate voice triggers
   evaluateVoiceTriggers()
 
+  // Drain one voice message from queue into radioLog
+  drainVoiceQueue()
+
   // Check expedition timers
   checkExpeditions()
 
@@ -134,6 +137,34 @@ function evaluateVoiceTriggers() {
   eligible.sort((a, b) => b.priority - a.priority)
   useRunStore.getState().set({
     voiceMessageQueue: [...run.voiceMessageQueue, ...eligible],
+  })
+}
+
+function drainVoiceQueue() {
+  const run = useRunStore.getState()
+  if (run.voiceMessageQueue.length === 0) return
+
+  const [next, ...remaining] = run.voiceMessageQueue
+  if (!next) return
+
+  const entry = {
+    id: `entry_${Date.now()}_${Math.random()}`,
+    lines: next.lines,
+    timestamp: run.gameTime,
+    isVoice: true,
+  }
+
+  useRunStore.getState().set({
+    voiceMessageQueue: remaining,
+    radioLog: [...run.radioLog, entry],
+    shownVoiceMessageIds: run.shownVoiceMessageIds.includes(next.id)
+      ? run.shownVoiceMessageIds
+      : [...run.shownVoiceMessageIds, next.id],
+    lastVoiceMessageAt: run.gameTime,
+    voiceMessageCooldowns: {
+      ...run.voiceMessageCooldowns,
+      [next.id]: run.gameTime,
+    },
   })
 }
 
