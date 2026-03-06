@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
+import { useSettingsStore, TEXT_SPEED_CPS } from '../../core/state/settingsState'
 
 interface VoiceMessageProps {
   lines: string[]
@@ -6,10 +7,9 @@ interface VoiceMessageProps {
   onComplete?: () => void
 }
 
-const CHARS_PER_SEC = 28
-
 export function VoiceMessage({ lines, isVoice = true, onComplete }: VoiceMessageProps) {
   const fullText = lines.join('\n')
+  const charsPerSec = useSettingsStore((s) => TEXT_SPEED_CPS[s.textSpeed])
   const [displayed, setDisplayed] = useState('')
   const [done, setDone] = useState(false)
   const indexRef = useRef(0)
@@ -20,7 +20,15 @@ export function VoiceMessage({ lines, isVoice = true, onComplete }: VoiceMessage
     setDisplayed('')
     setDone(false)
 
-    const interval = Math.round(1000 / CHARS_PER_SEC)
+    // Instant mode: show all at once
+    if (charsPerSec >= 9999) {
+      setDisplayed(fullText)
+      setDone(true)
+      onComplete?.()
+      return
+    }
+
+    const interval = Math.round(1000 / charsPerSec)
     intervalRef.current = setInterval(() => {
       indexRef.current += 1
       setDisplayed(fullText.slice(0, indexRef.current))
@@ -36,7 +44,7 @@ export function VoiceMessage({ lines, isVoice = true, onComplete }: VoiceMessage
       if (intervalRef.current) clearInterval(intervalRef.current)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [fullText])
+  }, [fullText, charsPerSec])
 
   return (
     <div className={`radio-log__entry${isVoice ? '' : ' radio-log__entry--system'}`}>
