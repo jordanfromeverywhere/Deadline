@@ -1,5 +1,6 @@
 import { useRunStore, selectResources, selectActionsUnlocked } from '../../core/state/runState'
 import { useMetaStore } from '../../core/state/metaState'
+import { useShallow } from 'zustand/shallow'
 import { ResonanceBar } from '../components/ResonanceBar'
 import { ResourceRow } from '../components/ResourceRow'
 import { ActionButton } from '../components/ActionButton'
@@ -8,7 +9,7 @@ import { drawSurvivor } from '../../content/survivors'
 const FORAGE_COOLDOWN = 30 // seconds
 
 export function ConsolePanel() {
-  const resources = useRunStore(selectResources)
+  const resources = useRunStore(useShallow(selectResources))
   const actionsUnlocked = useRunStore(selectActionsUnlocked)
   const forageCooldown = useRunStore((s) => s.forageCooldown)
   const set = useRunStore((s) => s.set)

@@ -1,4 +1,5 @@
 import { useRunStore, selectTrainStatus } from '../../core/state/runState'
+import { useShallow } from 'zustand/shallow'
 
 const CAR_LABELS: Record<string, string> = {
   control: 'Control Room',
@@ -12,7 +13,7 @@ const CAR_LABELS: Record<string, string> = {
 }
 
 export function TrainStatusPanel() {
-  const { moving, carsUnlocked } = useRunStore(selectTrainStatus)
+  const { moving, carsUnlocked } = useRunStore(useShallow(selectTrainStatus))
   const trainPosition = useRunStore((s) => s.trainPosition)
 
   return (

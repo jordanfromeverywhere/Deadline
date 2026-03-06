@@ -1,4 +1,5 @@
 import { useRunStore, selectMap, selectTrainStatus } from '../../core/state/runState'
+import { useShallow } from 'zustand/shallow'
 import type { Location } from '../../core/state/types'
 
 const WINDOW_RANGE = 25 // units on each side of train
@@ -66,7 +67,7 @@ function renderMapLine(locations: Location[], trainPosition: number): React.Reac
 
 export function MapPanel() {
   const map = useRunStore(selectMap)
-  const { position } = useRunStore(selectTrainStatus)
+  const { position } = useRunStore(useShallow(selectTrainStatus))
 
   const nearby = map.filter(
     (l) => l.state !== 'unknown' && Math.abs(l.x - position) <= WINDOW_RANGE
